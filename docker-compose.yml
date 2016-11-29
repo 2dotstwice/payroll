@@ -1,0 +1,40 @@
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
+
+payroll-mailhog:
+  image: phpdockerio/mailhog:latest
+  container_name: payroll-mailhog
+  ports:
+    - "8081:8025"
+
+payroll-mysql:
+  image: mysql:5.7
+  container_name: payroll-mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=payrollrootroot
+    - MYSQL_DATABASE=payroll
+    - MYSQL_USER=payroll
+    - MYSQL_PASSWORD=payrollpass
+
+payroll-webserver:
+  image: phpdockerio/nginx:latest
+  container_name: payroll-webserver
+  volumes:
+      - .:/var/www/payroll
+      - ./phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+  ports:
+   - "8080:80"
+  links:
+   - payroll-php-fpm
+
+payroll-php-fpm:
+  build: .
+  dockerfile: phpdocker/php-fpm/Dockerfile
+  container_name: payroll-php-fpm
+  volumes:
+    - .:/var/www/payroll
+    - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.0/fpm/conf.d/99-overrides.ini
+  links:
+    - payroll-mailhog
+    - payroll-mysql

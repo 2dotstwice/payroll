@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o errtrace
+set -o nounset
+set -o pipefail
+
+# go into the path of this script
+cd $(dirname $0)
+
+# check if payroll-mysql is running
+docker ps | grep payroll-mysql &> /dev/null || docker-compose up -d
+
+docker run -it --rm --name payroll-phpcli \
+  -v "$PWD":/usr/src/myapp -w /usr/src/myapp \
+  --link payroll-mysql \
+  php:alpine \
+  php $@
