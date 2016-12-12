@@ -1,0 +1,24 @@
+#!./phpcli
+<?php
+// Should be ran from cli, for migrations
+
+// set debug to true
+define('DEBUG', true, true);
+
+$app = require './bootstrap.php';
+$console = new \Symfony\Component\Console\Application();
+
+// enable debugging
+Symfony\Component\Debug\Debug::enable();
+$app['debug'] = true;
+
+$app->register(
+    new \Kurl\Silex\Provider\DoctrineMigrationsProvider($console),
+    array(
+        'migrations.directory' => __DIR__ . '/resources/migrations',
+        'migrations.namespace' => 'Payroll\Migrations',
+    )
+);
+
+$app->boot();
+$console->run();

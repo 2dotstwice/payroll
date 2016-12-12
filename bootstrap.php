@@ -153,9 +153,6 @@ $app->get('/', function () use ($app) {
     /* /oauth */
 });
 
-$app->register(new Quazardous\Silex\Provider\ConsoleServiceProvider, [
-    'db.migrations.path' => './resources/migrations',
-]);
 
 $app['users.service'] = function() use ($app) {
     return new TwoDotsTwice\Payroll\UserService($app['db']);
