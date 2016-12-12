@@ -15,7 +15,7 @@ elseif (isset($_SERVER['PAYROLL_MYSQL_ENV_MYSQL_DATABASE'])) {
     );
 }
 else {
-    $app['db.options'] = array( 'url' => 'sqlite:///' . STORAGE_PATH . '/app.sqlite' );
+    $app['db.options'] = array( 'url' => 'sqlite:///' . STORAGE_PATH . 'database/app.sqlite' );
 }
 
 // copy and alter in local.php
