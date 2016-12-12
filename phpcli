@@ -10,8 +10,11 @@ cd $(dirname $0)
 # check if payroll-mysql is running
 docker ps | grep payroll-mysql &> /dev/null || docker-compose up -d
 
+# check if payroll-phpcli image is build
+docker images | grep payroll-phpcli &> /dev/null || docker build -t payroll-phpcli phpcli-docker
+
 docker run -it --rm --name payroll-phpcli \
   -v "$PWD":/usr/src/myapp -w /usr/src/myapp \
   --link payroll-mysql \
-  php:alpine \
+  payroll-phpcli \
   php $@
